@@ -1,8 +1,12 @@
 1. No Prompts used
-2. In metricsviewer, we have 4 cards Acceptance Rate (by count), Total count of Suggestions (Prompts), Acceptance Rate (by lines), Total Lines of code Suggested. They have associated graphs linked to the data corresponding to it. Make these cards clickable and display only the graph associated to the card clicked. By default keep the cceptance Rate (by count) card clicked.
+2. In metricsviewer, we have 4 cards Acceptance Rate (by count), Total count of Suggestions (Prompts), Acceptance Rate (by lines), Total Lines of code Suggested. They have associated graphs linked to the data corresponding to it. Make these cards clickable and display only the graph associated to the card clicked. By default keep the Acceptance Rate (by count) card clicked.
 3. In the seat analysis tab, add a search functionality on FE itself for searching based on login name from the table.
 4. There are 4 cards on this page, make these cards clickable and update the table with the data relevant to the clicked card. The cards are Total Assigned, Assigned But Never Used, No Activity in the Last 7 days, No Activity in the Last 30 days.
 5. IN THE SEATSANALYSIS page, add a functionality to download the data as csv file.
 6. In the main component, add a toggle between dark mode and light mode, keep the default mode as light.
-7.
-8. 
+7. Add a column to display email of the users in the seat analysis table.
+8. Add table header to the seat analysis table and show email column even if value is not available.
+9. Stylise the table header same as the columns.
+10. Show email unavailable if email value is not available.
+11. Forget all the previous context. Consider the whole repository as a project, you must add a dark mode-light mode toggle at root level in the tab bar. On Click, the page should change colours.
+12. Help configure the dark theme mentioned in config file. Add a toggle between light and dark.
