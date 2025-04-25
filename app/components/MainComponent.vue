@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="darkMode ? 'dark-mode' : 'light-mode'">
     <v-toolbar color="indigo" elevation="4">
       <v-btn icon>
         <v-icon>mdi-github</v-icon>
@@ -8,6 +8,11 @@
       <v-toolbar-title class="toolbar-title">{{ displayName }}</v-toolbar-title>
       <h2 class="error-message"> {{ mockedDataMessage }} </h2>
       <v-spacer />
+
+      <!-- Dark Mode Toggle -->
+      <v-btn icon @click="toggleDarkMode">
+        <v-icon>{{ darkMode ? 'mdi-weather-sunny' : 'mdi-moon-waning-crescent' }}</v-icon>
+      </v-btn>
 
       <!-- Conditionally render the logout button -->
       <AuthState>
@@ -23,15 +28,12 @@
       </AuthState>
 
       <template #extension>
-
         <v-tabs v-model="tab" align-tabs="title">
           <v-tab v-for="item in tabItems" :key="item" :value="item">
             {{ item }}
           </v-tab>
         </v-tabs>
-
       </template>
-
     </v-toolbar>
 
     <!-- API Error Message -->
@@ -39,16 +41,16 @@
     <AuthState>
       <template #default="{ loggedIn }">
         <div v-show="signInRequired" class="github-login-container">
-          <NuxtLink v-if="!loggedIn && signInRequired" to="/auth/github" external class="github-login-button"> <v-icon
-              left>mdi-github</v-icon>
-            Sign in with GitHub</NuxtLink>
+          <NuxtLink v-if="!loggedIn && signInRequired" to="/auth/github" external class="github-login-button">
+            <v-icon left>mdi-github</v-icon>
+            Sign in with GitHub
+          </NuxtLink>
         </div>
       </template>
       <template #placeholder>
         <button disabled>Loading...</button>
       </template>
     </AuthState>
-
 
     <div v-show="!apiError">
       <v-progress-linear v-show="!metricsReady" indeterminate color="indigo" />
@@ -61,19 +63,18 @@
             <CopilotChatViewer v-if="item === 'copilot chat'" :metrics="metrics" />
             <SeatsAnalysisViewer v-if="item === 'seat analysis'" :seats="seats" />
             <ApiResponse
-v-if="item === 'api response'" :metrics="metrics" :original-metrics="originalMetrics"
+              v-if="item === 'api response'" :metrics="metrics" :original-metrics="originalMetrics"
               :seats="seats" />
           </v-card>
         </v-window-item>
         <v-alert
-v-show="metricsReady && metrics.length == 0" density="compact" text="No data available to display"
+          v-show="metricsReady && metrics.length == 0" density="compact" text="No data available to display"
           title="No data" type="warning" />
       </v-window>
-
     </div>
-
   </div>
 </template>
+
 <script lang='ts'>
 import type { Metrics } from '@/model/Metrics';
 import type { CopilotMetrics } from '@/model/Copilot_Metrics';
@@ -102,7 +103,6 @@ export default defineNuxtComponent({
       const { clear } = useUserSession()
       this.metrics = [];
       this.seats = [];
-      // console.log('metrics are now', this.metrics);
       clear();
     }
   },
@@ -186,6 +186,12 @@ export default defineNuxtComponent({
       seatsReady.value = true;
     }
 
+    const darkMode = ref(false); // Dark mode state
+
+    const toggleDarkMode = () => {
+      darkMode.value = !darkMode.value;
+    };
+
     return {
       metricsReady,
       metrics,
@@ -199,13 +205,25 @@ export default defineNuxtComponent({
       mockedDataMessage,
       itemName,
       displayName,
-      user
+      user,
+      darkMode,
+      toggleDarkMode
     };
   },
 })
 </script>
 
 <style scoped>
+.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
 .toolbar-title {
   white-space: nowrap;
   overflow: visible;

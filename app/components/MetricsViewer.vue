@@ -1,55 +1,81 @@
 <template>
   <div>
-    <div class="tiles-container">      
-      <!-- Acceptance Rate Tile -->  
-      <!--changed on 2024/11/22 to reorder cards, so the accepance rate by counts are be more focused-->
-      <v-card elevation="4" color="white" variant="elevated" class="mx-auto my-3" style="width: 300px; height: 175px;">
+    <div class="tiles-container">
+      <!-- Acceptance Rate (by count) Card -->
+      <v-card
+        elevation="4"
+        color="white"
+        variant="elevated"
+        class="mx-auto my-3"
+        style="width: 300px; height: 175px; cursor: pointer;"
+        :class="{ 'selected-card': selectedCard === 'acceptanceRateByCount' }"
+        @click="selectedCard = 'acceptanceRateByCount'"
+      >
         <v-card-item>
           <div class="tiles-text">
-            <div class="spacing-25"/>
+            <div class="spacing-25" />
             <div class="text-h6 mb-1">Acceptance Rate (by count)</div>
-            <div class="text-caption">
-              Over the last 28 days
-            </div>
+            <div class="text-caption">Over the last 28 days</div>
             <p class="text-h4">{{ acceptanceRateAverageByCount.toFixed(2) }}%</p>
           </div>
         </v-card-item>
       </v-card>
 
-      <v-card elevation="4" color="white" variant="elevated" class="mx-auto my-3" style="width: 300px; height: 175px;">
+      <!-- Total count of Suggestions (Prompts) Card -->
+      <v-card
+        elevation="4"
+        color="white"
+        variant="elevated"
+        class="mx-auto my-3"
+        style="width: 300px; height: 175px; cursor: pointer;"
+        :class="{ 'selected-card': selectedCard === 'totalSuggestions' }"
+        @click="selectedCard = 'totalSuggestions'"
+      >
         <v-card-item>
           <div class="tiles-text">
-            <div class="spacing-10"/>
+            <div class="spacing-10" />
             <div class="text-h6 mb-1">Total count of Suggestions (Prompts)</div>
-            <div class="text-caption">
-              Over the last 28 days
-            </div>
+            <div class="text-caption">Over the last 28 days</div>
             <p class="text-h4">{{ cumulativeNumberSuggestions }}</p>
           </div>
         </v-card-item>
       </v-card>
 
-      <v-card elevation="4" color="white" variant="elevated" class="mx-auto my-3" style="width: 300px; height: 175px;">
-          <v-card-item>
-            <div class="spacing-25"/>
-            <div class="tiles-text">
-              <div class="text-h6 mb-1">Acceptance Rate (by lines)</div>
-              <div class="text-caption">
-                Over the last 28 days
-              </div>
-              <p class="text-h4">{{ acceptanceRateAverageByLines.toFixed(2) }}%</p>
+      <!-- Acceptance Rate (by lines) Card -->
+      <v-card
+        elevation="4"
+        color="white"
+        variant="elevated"
+        class="mx-auto my-3"
+        style="width: 300px; height: 175px; cursor: pointer;"
+        :class="{ 'selected-card': selectedCard === 'acceptanceRateByLines' }"
+        @click="selectedCard = 'acceptanceRateByLines'"
+      >
+        <v-card-item>
+          <div class="spacing-25" />
+          <div class="tiles-text">
+            <div class="text-h6 mb-1">Acceptance Rate (by lines)</div>
+            <div class="text-caption">Over the last 28 days</div>
+            <p class="text-h4">{{ acceptanceRateAverageByLines.toFixed(2) }}%</p>
           </div>
         </v-card-item>
       </v-card>
 
-      <v-card elevation="4" color="white" variant="elevated" class="mx-auto my-3" style="width: 300px; height: 175px;">
+      <!-- Total Lines of code Suggested Card -->
+      <v-card
+        elevation="4"
+        color="white"
+        variant="elevated"
+        class="mx-auto my-3"
+        style="width: 300px; height: 175px; cursor: pointer;"
+        :class="{ 'selected-card': selectedCard === 'totalLinesSuggested' }"
+        @click="selectedCard = 'totalLinesSuggested'"
+      >
         <v-card-item>
           <div class="tiles-text">
-            <div class="spacing-10"/>
+            <div class="spacing-10" />
             <div class="text-h6 mb-1">Total Lines of code Suggested</div>
-            <div class="text-caption">
-              Over the last 28 days
-            </div>
+            <div class="text-caption">Over the last 28 days</div>
             <p class="text-h4">{{ totalLinesSuggested }}</p>
           </div>
         </v-card-item>
@@ -57,23 +83,19 @@
     </div>
 
     <v-main class="p-1" style="min-height: 300px;">
-
       <v-container style="min-height: 300px;" class="px-4 elevation-2">
-      <h2>Acceptance rate by count (%)</h2>
-      <Bar :data="acceptanceRateByCountChartData" :options="chartOptions" />
+        <!-- Conditionally Render Graphs -->
+        <h2 v-if="selectedCard === 'acceptanceRateByCount'">Acceptance rate by count (%)</h2>
+        <Bar v-if="selectedCard === 'acceptanceRateByCount'" :data="acceptanceRateByCountChartData" :options="chartOptions" />
 
-      <h2>Total Suggestions Count | Total Acceptances Count</h2>
-      <Line :data="totalSuggestionsAndAcceptanceChartData" :options="chartOptions" />
+        <h2 v-if="selectedCard === 'totalSuggestions'">Total Suggestions Count | Total Acceptances Count</h2>
+        <Line v-if="selectedCard === 'totalSuggestions'" :data="totalSuggestionsAndAcceptanceChartData" :options="chartOptions" />
 
-      <h2>Acceptance rate by lines (%)</h2>
-      <Bar :data="acceptanceRateByLinesChartData" :options="chartOptions" />
+        <h2 v-if="selectedCard === 'acceptanceRateByLines'">Acceptance rate by lines (%)</h2>
+        <Bar v-if="selectedCard === 'acceptanceRateByLines'" :data="acceptanceRateByLinesChartData" :options="chartOptions" />
 
-      <h2>Total Lines Suggested | Total Lines Accepted</h2>
-      <Line :data="chartData" :options="chartOptions" />
-
-      <h2>Total Active Users</h2>
-      <Bar :data="totalActiveUsersChartData" :options="totalActiveUsersChartOptions" />
-
+        <h2 v-if="selectedCard === 'totalLinesSuggested'">Total Lines Suggested | Total Lines Accepted</h2>
+        <Line v-if="selectedCard === 'totalLinesSuggested'" :data="chartData" :options="chartOptions" />
       </v-container>
     </v-main>
   </div>
@@ -124,6 +146,7 @@ export default defineComponent({
         }
     },
   setup(props) {
+    const selectedCard = ref('acceptanceRateByCount'); // Default selected card
 
     //Tiles
     const acceptanceRateAverageByLines = ref(0);
@@ -309,7 +332,7 @@ export default defineComponent({
       ]
     };
 
-    return { totalSuggestionsAndAcceptanceChartData, chartData, 
+    return { selectedCard, totalSuggestionsAndAcceptanceChartData, chartData, 
       chartOptions, totalActiveUsersChartData, 
       totalActiveUsersChartOptions, acceptanceRateByLinesChartData, acceptanceRateByCountChartData, acceptanceRateAverageByLines, acceptanceRateAverageByCount, cumulativeNumberSuggestions, 
       cumulativeNumberAcceptances, cumulativeNumberLOCAccepted, totalLinesSuggested };
@@ -334,3 +357,9 @@ export default defineComponent({
   
 });
 </script>
+
+<style scoped>
+.selected-card {
+  border: 2px solid #1976d2;
+}
+</style>
