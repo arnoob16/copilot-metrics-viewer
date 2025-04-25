@@ -1,5 +1,5 @@
 <template>
-  <div :class="darkMode ? 'dark-mode' : 'light-mode'">
+  <div>
     <v-toolbar color="indigo" elevation="4">
       <v-btn icon>
         <v-icon>mdi-github</v-icon>
@@ -8,11 +8,6 @@
       <v-toolbar-title class="toolbar-title">{{ displayName }}</v-toolbar-title>
       <h2 class="error-message"> {{ mockedDataMessage }} </h2>
       <v-spacer />
-
-      <!-- Dark Mode Toggle -->
-      <v-btn icon @click="toggleDarkMode">
-        <v-icon>{{ darkMode ? 'mdi-weather-sunny' : 'mdi-moon-waning-crescent' }}</v-icon>
-      </v-btn>
 
       <!-- Conditionally render the logout button -->
       <AuthState>
@@ -186,12 +181,6 @@ export default defineNuxtComponent({
       seatsReady.value = true;
     }
 
-    const darkMode = ref(false); // Dark mode state
-
-    const toggleDarkMode = () => {
-      darkMode.value = !darkMode.value;
-    };
-
     return {
       metricsReady,
       metrics,
@@ -205,24 +194,13 @@ export default defineNuxtComponent({
       mockedDataMessage,
       itemName,
       displayName,
-      user,
-      darkMode,
-      toggleDarkMode
+      user
     };
   },
 })
 </script>
 
 <style scoped>
-.light-mode {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-.dark-mode {
-  background-color: #121212;
-  color: #ffffff;
-}
 
 .toolbar-title {
   white-space: nowrap;
