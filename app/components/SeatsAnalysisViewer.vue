@@ -85,7 +85,7 @@
         <v-main class="p-1" style="min-height: 300px;">
             <v-container style="min-height: 300px;" class="px-4 elevation-2">
                 <br>
-                <h2>All assigned seats </h2>
+                <h2>All assigned seats</h2>
 
                 <!-- Search Input -->
                 <v-text-field
@@ -111,7 +111,7 @@
                         <tr>
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.login }}</td>
-                            <td>{{ item.email }}</td> <!-- New Email Column -->
+                            <td>{{ item.email || 'Email Unavailable' }}</td> <!-- Show 'Email Unavailable' if email is not available -->
                             <td>{{ item.id }}</td>
                             <td>{{ item.team }}</td>
                             <td>{{ item.created_at }}</td>
@@ -174,7 +174,6 @@ export default defineComponent({
             );
         });
 
-        // Watch for changes in the seats prop and calculate card values
         watchEffect(() => {
             if (props.seats && Array.isArray(props.seats)) {
                 totalSeats.value = props.seats;
@@ -213,7 +212,7 @@ export default defineComponent({
             headers: [
                 { text: 'S.No', value: 'serialNumber' },
                 { text: 'Login', value: 'login' },
-                { text: 'Email', value: 'email' }, // New Email Header
+                { text: 'Email', value: 'email' }, // Email Header
                 { text: 'GitHub ID', value: 'id' },
                 { text: 'Assigning Team', value: 'team' },
                 { text: 'Assigned Time', value: 'created_at' },
